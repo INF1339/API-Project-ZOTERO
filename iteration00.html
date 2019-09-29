@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+        <script>
+            function getAPIkey_and_go() {
+                var APIkey = myZoteroAPIKey() 
+                var tag = document.getElementById('tag').value
+                 var url = 'https://api.zotero.org/users/310308/items/top?key=TWiJnwOPUZ8lBOTpC9WNT9aQ&format=json&tag='+tag
+                //createCanvas(400, 400);
+                loadJSON(url, gotData)
+                
+                
+            }
+            function myZoteroAPIKey(){
+                return('SbucywlO2q6NmkpGZsvw3pbF')
+            }
+            function setup(){
+                noCanvas()
+            }
+
+            
+            function gotData(data) {
+                console.log(data)
+                var output = ''
+                for (var i = 0; i<data.length; i++){
+                    console.log(data[i].data.title)
+                    output = output + '<h3><a href="' + data[i].data.url + '" target="null">' + data[i].data.title + '</a>' + '</h3>'
+                    var author='no author'
+                    if (data[i].data.creators.length > 0) {
+                        if (data[i].data.creators[0].hasOwnProperty("name")){
+                            author = data[i].data.creators[0].name
+                        }
+                        else if (data[i].data.creators[0].hasOwnProperty("firstName")){
+                            author = data[i].data.creators[0].firstName + ' ' + data[i].data.creators[0].lastName
+                        }
+                    }   
+                    output = output + '<p>' + author + '</p>'
+                }
+                document.getElementById('temporary_output_text').innerHTML = output
+            }
+            function draw() { 
+                //background(220);
+                //ellipse(50, 50, 80, 80);
+            }
+        </script>
+    </head>
+    <body>
+        <h3>Get User Input</h3>
+        <input type="text" id="tag" value="tag">
+        <button type="button" onclick="getAPIkey_and_go()">Read Tag & GO</button> 
+        <div id="temporary_output_text"></div>
+       
+        
+    </body>
+</html>
